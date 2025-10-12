@@ -15,7 +15,7 @@ jobs:
           echo "Hello, world!" > ./artifact.txt
 
       - name: Post artifact to Art.Vault
-        uses: zerdicorp/art.vault-post@v1
+        uses: zerdicorp/art.vault-post@v2
         with:
           vault-secret: ${{ secrets.ART_VAULT_SECRET }}
           project-name: art.vault-usage-ex
@@ -28,7 +28,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Fetch artifact from Art.Vault
-        uses: zerdicorp/art.vault-fetch@v1
+        uses: zerdicorp/art.vault-fetch@v2
         with:
           vault-secret: ${{ secrets.ART_VAULT_SECRET }}
           project-name: art.vault-usage-ex
