@@ -1,0 +1,51 @@
+name: "Example of Art.Vault usage"
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  upload-artifact:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Create test artifact
+        run: |
+          echo "Hello, world!" > ./artifact.txt
+
+      - name: Post artifact to Art.Vault
+        uses: zerdicorp/art.vault-post@v1
+        with:
+          vault-secret: ${{ secrets.ART_VAULT_SECRET }}
+          project-name: art.vault-usage-ex
+          file-path: ./artifact.txt
+
+  fetch-artifact:
+    runs-on: ubuntu-latest
+    needs: upload-artifact
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Fetch artifact from Art.Vault
+        uses: zerdicorp/art.vault-fetch@v1
+        with:
+          vault-secret: ${{ secrets.ART_VAULT_SECRET }}
+          project-name: art.vault-usage-ex
+          artifact-name: artifact.txt
+          output-path: .
+
+      - name: Verify downloaded file
+        run: |
+          if [ -f "./artifact.txt" ]; then
+            echo "✅ File downloaded successfully!"
+            if grep -q "Hello, world!" ./artifact.txt; then
+              echo "✅ File contains expected content! Test passed!"
+            else
+              echo "❌ File doesn't contain expected content! Test failed!"
+              exit 1
+            fi
+          else
+            echo "❌ File not found!"
+            exit 1
+          fi
