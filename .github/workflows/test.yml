@@ -19,7 +19,7 @@ jobs:
         with:
           vault-secret: ${{ secrets.ART_VAULT_SECRET }}
           project-name: art.vault-usage-ex
-          file-path: ./artifact.txt
+          artifact-path: ./artifact.txt
 
   fetch-artifact:
     runs-on: ubuntu-latest
@@ -33,7 +33,7 @@ jobs:
           vault-secret: ${{ secrets.ART_VAULT_SECRET }}
           project-name: art.vault-usage-ex
           artifact-name: artifact.txt
-          output-path: .
+          output-path: ./
 
       - name: Verify downloaded file
         run: |
